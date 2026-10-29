@@ -62,3 +62,23 @@ Zuyu / SKYrus podem divergir. Nao atualize o submodulo ate validar essas APIs.
 que so pode ser verificada compilando a arvore real do SKYrus e executando
 jogos. Um build que falhar deve mostrar o erro C++ real; nao aplique fixes
 visuais ou alteracoes de algoritmo como resposta automatica.
+
+## Etapa 6 — contrato de API SKYna vs Zuyu
+
+- `Profile`: expõe cinco nomes históricos de capacidades solicitados pela API SKYna,
+  sem falsamente implementar seus efeitos no backend Zuyu. Alinhamento e limites
+  de clip distance começam em 1/8 (padrões originais do SKYna, e não zero).
+- `TexturePixelFormat::OTHER` é um sentinela exclusivo da interface de host;
+  nenhuma enumeração preexistente do Zuyu é renumerada. O host deve mapear
+  formatos desconhecidos explicitamente em vez de fazer cast de IDs de driver.
+- `RuntimeInfo::SetTransformFeedbackVaryings(vector)` copia com verificação
+  de limite para o array Zuyu de 256 posições e atualiza `xfb_count`. O host
+  **não** deve atribuir diretamente um `std::vector` ao array.
+- `IR::Type::S32` NÃO foi inventado: esse valor não existe no IR do Zuyu.
+  Se houver uso desse tipo pelo SKYrus, será necessária uma adaptação explícita
+  no host; criar um alias falso poderia alterar a interpretação dos shaders.
+- Hashes SHA256 continuam cobrindo 235 fontes originais; apenas cinco headers
+  públicos de ABI e CMakeLists estão excluídos, sem alterar os backends.
+- Teste de contrato (requer headers `fmt`, Boost e `common` originais):
+  `c++ -std=c++20 -Iinclude -Isrc -Ithird_party/zuyu-original/src tests/zuyu_api_contract.cpp -o /tmp/zuyu-api-contract && /tmp/zuyu-api-contract`.
+  O APK completo requer as demais dependências do Android.

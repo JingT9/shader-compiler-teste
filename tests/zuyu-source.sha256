@@ -1,5 +1,6 @@
 # SHA256 dos arquivos originais do Zuyu, antes dos adaptadores de ABI do SKYrus.
-# Excecoes: CMakeLists.txt (infraestrutura), environment.h e host_translate_info.h (ABI).
+# Excecoes: CMakeLists.txt (infraestrutura); environment.h, host_translate_info.h,
+# profile.h, runtime_info.h e shader_info.h (interfaces publicas/ABI).
 # Formato: sha256<dois espacos>caminho relativo a src/shader_recompiler.
 1bbe020437f18bed45a6d3aff4976e054088a8916a69052745ade3a8711f1ca5  backend/bindings.h
 89c30fdbddfe83c324aef35df1d08744dea8e213be275d5c8064528f2a58dd9a  backend/glasm/emit_glasm.cpp
@@ -233,9 +234,6 @@ d61ef5701770758483dbb17c962461cd2032b2f5325bdd0256aaf5856516ed64  ir_opt/vendor_
 81ef1acc2aaa1367c43165bcf7319a00dd0e12dcf7410b40c25a59f8589e9220  ir_opt/verification_pass.cpp
 bdc825b50ea19aa09040c924b7a1b47cf2bd6e8ff2ed96150a822259d21af2dd  object_pool.h
 d1771e484fe6332c3617feeceb512748105f18bd050f4f57efe8f738c1b8a261  precompiled_headers.h
-f1990e5a9e3d0af08c17d540403dc9a8c001d121b15bea8e5054435dbb3c6765  profile.h
 01d7fc51fc18df5e7631b96a73f0c5ba50bf8063d9a1fd4fbd106261258654b3  program_header.h
-fef648c226d4e057dd9cb83a1b990076a48bb53b786ef003881e03619ee3a647  runtime_info.h
-912f5228b9ad7c0fd2dcac0edd68b4263d94c12f330f17a82740f1c28ac51972  shader_info.h
 6f50eafd32df622328adb633de31ed5469c8e8c3f2118429832088cebda1619f  stage.h
 087abc450bf11ad4efcbfb27419b178003628d7fb2b6af9570535e97f7ab2d5b  varying_state.h

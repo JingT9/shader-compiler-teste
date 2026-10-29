@@ -3,7 +3,10 @@
 
 #pragma once
 
+#include <algorithm>
 #include <array>
+#include <span>
+#include <stdexcept>
 #include <map>
 #include <optional>
 #include <vector>
@@ -86,6 +89,17 @@ struct RuntimeInfo {
     /// Transform feedback state for each varying
     std::array<TransformFeedbackVarying, 256> xfb_varyings{};
     u32 xfb_count{0};
+
+    // SKYna callers provide a vector, while original Zuyu emits SPIR-V/GLSL
+    // from the fixed 256-entry array plus xfb_count. Keep that internal layout,
+    // and copy the host data through a checked API without changing shaders.
+    void SetTransformFeedbackVaryings(std::span<const TransformFeedbackVarying> varyings) {
+        if (varyings.size() > xfb_varyings.size()) {
+            throw std::length_error("Zuyu transform feedback has more than 256 varyings");
+        }
+        std::copy(varyings.begin(), varyings.end(), xfb_varyings.begin());
+        xfb_count = static_cast<u32>(varyings.size());
+    }
 };
 
 } // namespace Shader

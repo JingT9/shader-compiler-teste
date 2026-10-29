@@ -35,7 +35,7 @@ enum class TextureType : u32 {
 };
 constexpr u32 NUM_TEXTURE_TYPES = 9;
 
-enum class TexturePixelFormat {
+enum class TexturePixelFormat : u32 {
     A8B8G8R8_UNORM,
     A8B8G8R8_SNORM,
     A8B8G8R8_SINT,
@@ -138,6 +138,8 @@ enum class TexturePixelFormat {
     D24_UNORM_S8_UINT,
     S8_UINT_D24_UNORM,
     D32_FLOAT_S8_UINT,
+    // SKYna host fallback sentinel; does not renumber any Zuyu formats.
+    OTHER = 0xffffffffu,
 };
 
 enum class ImageFormat : u32 {

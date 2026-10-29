@@ -23,7 +23,7 @@ for rel in required:
 
 # Compare the shader algorithms against immutable hashes of the unmodified Zuyu
 # reference. A source snapshot is unnecessary: the main copy is the one in src/.
-# Two public ABI headers and CMakeLists.txt are intentionally excluded.
+# Five public ABI headers and CMakeLists.txt are intentionally excluded.
 count = 0
 if reference.is_file():
     for line_no, line in enumerate(reference.read_text().splitlines(), 1):
@@ -39,8 +39,8 @@ if reference.is_file():
             errors.append(f"Arquivo original ausente: {rel}")
         elif hashlib.sha256(path.read_bytes()).hexdigest() != sha:
             errors.append(f"Arquivo original modificado: {rel}")
-    if count != 238:
-        errors.append(f"Manifesto incompleto: {count} arquivos (esperados: 238)")
+    if count != 235:
+        errors.append(f"Manifesto incompleto: {count} arquivos (esperados: 235)")
 else:
     errors.append("Falta tests/zuyu-source.sha256 para comparar o codigo original")
 
@@ -53,5 +53,5 @@ if errors:
         print("FALTA:", error, file=sys.stderr)
     print(f"Verificacao parcial: {count} arquivos do Zuyu comparados", file=sys.stderr)
     sys.exit(1)
-print(f"OK: {count} arquivos conferidos por SHA256 (exceto 2 cabecalhos de API e CMake); headers SKYrus presentes")
+print(f"OK: {count} arquivos conferidos por SHA256 (exceto 5 cabecalhos de API e CMake); headers SKYrus presentes")
 print("AVISO: estrutura verificada; compilacao e ABI ainda precisam de teste")

@@ -45,6 +45,9 @@ struct Profile {
     bool support_scaled_attributes{};
     bool support_multi_viewport{};
     bool support_geometry_streams{};
+    // SKYna public API compatibility: the original Zuyu backend does not
+    // consume this host capability flag. Do not claim support from its value.
+    bool support_variable_pointers_storage_buffer{};
 
     bool warp_size_potentially_larger_than_guest{};
 
@@ -81,15 +84,22 @@ struct Profile {
     bool ignore_nan_fp_comparisons{};
     /// Some drivers have broken support for OpVectorExtractDynamic on subgroup mask inputs
     bool has_broken_spirv_subgroup_mask_vector_extract_dynamic{};
+    // Additional SKYna host flags, currently unused by original Zuyu code.
+    bool has_broken_spirv_subgroup_shuffle{};
+    u32 max_subgroup_size{};
+    bool has_broken_spirv_vector_access_chain{};
+    bool disable_subgroup_shuffle{};
 
     u32 gl_max_compute_smem_size{};
 
     /// Maxwell and earlier nVidia architectures have broken robust support
     bool has_broken_robust{};
 
-    u64 min_ssbo_alignment{};
+    // SKYna's safe defaults: 0 underflows the (alignment - 1) mask in
+    // original Zuyu SSBO emission; 0 disables all user clip distances.
+    u64 min_ssbo_alignment{1};
 
-    u32 max_user_clip_distances{};
+    u32 max_user_clip_distances{8};
 };
 
 } // namespace Shader
