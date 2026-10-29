@@ -39,3 +39,26 @@ c++ -std=c++20 -Iinclude -Isrc tests/settings_alias.cpp -o /tmp/zuyu-settings &&
 Isto **nao e um teste de compilacao do APK**. O compilador ainda depende da
 biblioteca `common`, de `fmt::fmt` e `sirit`, e as interfaces entre versoes
 Zuyu / SKYrus podem divergir. Nao atualize o submodulo ate validar essas APIs.
+
+## Etapa 3 — adaptadores para compilacao do SKYrus
+
+- Requer **as dependencias `common` originais** importadas pelo script do passo 2.
+- Exporta `common` como biblioteca INTERFACE somente quando a build pai nao a
+  fornece. Os algoritmos continuam sendo os fontes originais do Zuyu.
+- Desvia as mensagens de logging para `Shader::Log` e implementa as duas
+  chamadas de falha (`assert_fail_impl` e `unreachable_impl`) com excecoes.
+  Isto afeta somente a integracao/erros de execucao, nao os calculos de shader.
+- `Environment::Dump` encaminha a assinatura de dois hashes do Zuyu para a
+  callback de um hash do SKYna, mantendo a API do host. A grafia antiga
+  `IsPropietaryDriver` tambem esta disponivel como alias.
+- `HostTranslateInfo::needs_byte_swap_workaround` foi acrescentado apenas para
+  compatibilidade com a estrutura publica usada pelo SKYrus; a implementacao
+  de traducao original do Zuyu nao foi modificada.
+- Execute `bash scripts/get_original_zuyu_common.sh`, depois
+  `python3 scripts/check_build_integration.py`.
+- `fmt::fmt` e `sirit` precisam vir da build hospedeira (SKYrus).
+
+**Limite:** essas adaptacoes NAO comprovam a compatibilidade total da ABI,
+que so pode ser verificada compilando a arvore real do SKYrus e executando
+jogos. Um build que falhar deve mostrar o erro C++ real; nao aplique fixes
+visuais ou alteracoes de algoritmo como resposta automatica.

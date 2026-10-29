@@ -253,7 +253,7 @@ target_include_directories(shader_recompiler PUBLIC
 # Optional location of the *original* Zuyu common headers. No replacements
 # for BitField, assertions or logging implementations are invented here.
 if(EXISTS "${_ZUYU_TEST_ROOT}/third_party/zuyu-original/src/common/common_types.h")
-    target_include_directories(shader_recompiler PRIVATE
+    target_include_directories(shader_recompiler PUBLIC
         "${_ZUYU_TEST_ROOT}/third_party/zuyu-original/src")
 endif()
 

@@ -41,7 +41,14 @@ public:
     [[nodiscard]] virtual std::optional<ReplaceConstant> GetReplaceConstBuffer(u32 bank,
                                                                                u32 offset) = 0;
 
-    virtual void Dump(u64 pipeline_hash, u64 shader_hash) = 0;
+    // SKYrus hosts implement the original SKYna one-hash callback. The Zuyu
+    // translator may provide an additional pipeline hash; forwarding just the
+    // shader hash preserves SKYrus's existing diagnostic callback contract.
+    virtual void Dump(u64 shader_hash) = 0;
+    virtual void Dump(u64 pipeline_hash, u64 shader_hash) {
+        (void)pipeline_hash;
+        Dump(shader_hash);
+    }
 
     [[nodiscard]] const ProgramHeader& SPH() const noexcept {
         return sph;
@@ -57,6 +64,11 @@ public:
 
     [[nodiscard]] u32 StartAddress() const noexcept {
         return start_address;
+    }
+
+    // Compatibility with the historical SKYna spelling (API only).
+    [[nodiscard]] bool IsPropietaryDriver() const noexcept {
+        return IsProprietaryDriver();
     }
 
     [[nodiscard]] bool IsProprietaryDriver() const noexcept {

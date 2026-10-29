@@ -21,6 +21,8 @@ struct HostTranslateInfo {
                                                 ///< passthrough shaders
     bool support_conditional_barrier{}; ///< True when the device supports barriers in conditional
                                         ///< control flow
+    // Present in the SKYna host interface, not read by the unchanged Zuyu shaders.
+    bool needs_byte_swap_workaround{};
 };
 
 } // namespace Shader
