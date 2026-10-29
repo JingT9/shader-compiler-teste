@@ -242,6 +242,21 @@ add_library(shader_recompiler STATIC
     varying_state.h
 )
 
+# Keep the original Zuyu translation units and link dependencies unchanged.
+# Export both original (shader_recompiler/*) and SKYrus (shader_compiler/*)
+# header spellings; the two names address the same source files.
+get_filename_component(_ZUYU_TEST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
+target_include_directories(shader_recompiler PUBLIC
+    "${_ZUYU_TEST_ROOT}/src"
+    "${_ZUYU_TEST_ROOT}/include"
+)
+# Optional location of the *original* Zuyu common headers. No replacements
+# for BitField, assertions or logging implementations are invented here.
+if(EXISTS "${_ZUYU_TEST_ROOT}/third_party/zuyu-original/src/common/common_types.h")
+    target_include_directories(shader_recompiler PRIVATE
+        "${_ZUYU_TEST_ROOT}/third_party/zuyu-original/src")
+endif()
+
 target_link_libraries(shader_recompiler PUBLIC common fmt::fmt sirit)
 
 if (MSVC)
