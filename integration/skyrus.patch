@@ -1,0 +1,119 @@
+--- a/.gitmodules
++++ b/.gitmodules
+@@ -62,5 +62,5 @@
+ 	branch = main
+ [submodule "app/libraries/shader-compiler"]
+ 	path = app/libraries/shader-compiler
+-	url = https://github.com/nanave14/Shader-Compiler-SKYna.git
++	url = https://github.com/JingT9/shader-compiler-teste.git
+ 	branch = main
+--- a/app/CMakeLists.txt
++++ b/app/CMakeLists.txt
+@@ -119,7 +119,7 @@
+     endforeach (library)
+ endfunction(target_link_libraries_system)
+ 
+-# yuzu Shader Compiler
++# SKYrus Shader Compiler
+ add_subdirectory("libraries/shader-compiler")
+ target_include_directories(shader_recompiler PUBLIC "libraries/shader-compiler/include")
+ target_link_libraries_system(shader_recompiler Boost::intrusive Boost::container range-v3)
+--- a/app/src/main/rust/gpu/tests/run_descriptor_plan_native.py
++++ b/app/src/main/rust/gpu/tests/run_descriptor_plan_native.py
+@@ -14,7 +14,7 @@
+ if not cxx:raise SystemExit('Descriptor plan tests require Clang')
+ headers=deps/'vulkan-headers/include'
+ if not headers.is_dir():headers=deps/'vkhpp/Vulkan-Headers/include'
+-shader=next((x for x in[deps/'shader-compiler',deps/'shader-compiler/shader_compiler']if(x/'runtime_info.h').is_file()),None)
++shader=next((x for x in[deps/'shader-compiler',deps/'shader-compiler/shader_compiler', deps / 'shader-compiler/include/shader_compiler']if(x/'runtime_info.h').is_file()),None)
+ if shader is None:raise SystemExit('Missing pinned compiler checkout')
+ boost=sorted((deps/'boost/libs').glob('*/include'))
+ flags=['-std=c++20','-O1','-fPIC','-fno-strict-aliasing','-Wall','-Wextra','-Wno-unused-parameter','-Wno-unused-private-field','-Wno-missing-field-initializers','-Wno-c99-designator','-Wno-reorder-init-list','-Wno-missing-braces','-DFMT_HEADER_ONLY','-DVULKAN_HPP_NO_SPACESHIP_OPERATOR','-DVULKAN_HPP_NO_STRUCT_CONSTRUCTORS','-DVULKAN_HPP_NO_SETTERS','-DVULKAN_HPP_NO_SMART_HANDLE','-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1','-DVULKAN_HPP_ENABLE_DYNAMIC_LOADER_TOOL=0']
+--- a/app/src/main/rust/gpu/tests/run_fixed_pipeline_native.py
++++ b/app/src/main/rust/gpu/tests/run_fixed_pipeline_native.py
+@@ -28,7 +28,7 @@
+     headers = deps / 'vulkan-headers/include'
+     if not headers.is_dir():
+         headers = deps / 'vkhpp/Vulkan-Headers/include'
+-    shader = next((path for path in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler']
++    shader = next((path for path in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler', deps / 'shader-compiler/include/shader_compiler']
+                    if (path / 'runtime_info.h').is_file()), None)
+     cxx = os.environ.get('CXX') or shutil.which('clang++')
+     if not cxx or not shader:
+--- a/app/src/main/rust/gpu/tests/run_graphics_state_native.py
++++ b/app/src/main/rust/gpu/tests/run_graphics_state_native.py
+@@ -27,7 +27,7 @@
+     headers = deps / 'vulkan-headers/include'
+     if not headers.is_dir():
+         headers = deps / 'vkhpp/Vulkan-Headers/include'
+-    shader = next((p for p in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler'] if (p / 'shader_info.h').is_file()), None)
++    shader = next((p for p in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler', deps / 'shader-compiler/include/shader_compiler'] if (p / 'shader_info.h').is_file()), None)
+     assert shader, 'Requires the pinned shader-compiler headers'
+     cxx = os.environ.get('CXX') or shutil.which('clang++')
+     assert cxx, 'Requires Clang C++20'
+--- a/app/src/main/rust/gpu/tests/run_maxwell_native.py
++++ b/app/src/main/rust/gpu/tests/run_maxwell_native.py
+@@ -22,7 +22,7 @@
+ headers = deps / 'vulkan-headers/include'
+ if not headers.is_dir():
+     headers = deps / 'vkhpp/Vulkan-Headers/include'
+-shader = next((path for path in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler']
++shader = next((path for path in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler', deps / 'shader-compiler/include/shader_compiler']
+                if (path / 'runtime_info.h').is_file() and (path / 'common/common_types.h').is_file()), None)
+ if shader is None:
+     raise SystemExit('Maxwell tests require the pinned shader-compiler submodule; set GPU_DEPENDENCY_ROOT for an external checkout.')
+--- a/app/src/main/rust/gpu/tests/run_pipeline_plan_native.py
++++ b/app/src/main/rust/gpu/tests/run_pipeline_plan_native.py
+@@ -36,7 +36,7 @@
+     headers = deps / 'vulkan-headers/include'
+     if not headers.is_dir():
+         headers = deps / 'vkhpp/Vulkan-Headers/include'
+-    shader = next((path for path in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler']
++    shader = next((path for path in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler', deps / 'shader-compiler/include/shader_compiler']
+                    if (path / 'runtime_info.h').is_file()), None)
+     cxx = os.environ.get('CXX') or shutil.which('clang++')
+     if not cxx or not shader:
+--- a/app/src/main/rust/gpu/tests/run_runtime_shader_native.py
++++ b/app/src/main/rust/gpu/tests/run_runtime_shader_native.py
+@@ -11,7 +11,7 @@
+     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--rust-library',type=Path,required=True);p.add_argument('--dependencies',type=Path,default=Path(os.environ.get('GPU_DEPENDENCY_ROOT',project/'app/libraries')));a=p.parse_args();deps=a.dependencies.resolve();vk=deps/'vulkan-headers/include'
+     if not vk.is_dir():vk=deps/'vkhpp/Vulkan-Headers/include'
+     shader=deps/'shader-compiler'
+-    if not(shader/'runtime_info.h').exists():shader=shader/'shader_compiler'
++    shader=next((p for p in [shader, shader/'shader_compiler', shader/'include/shader_compiler'] if (p/'runtime_info.h').is_file()), shader)
+     cxx=os.environ.get('CXX')or shutil.which('clang++')
+     flags=['-std=c++20','-O1','-Wno-c99-designator','-Wno-reorder-init-list','-Wno-bitfield-enum-conversion','-DVULKAN_HPP_NO_SPACESHIP_OPERATOR','-DVULKAN_HPP_NO_STRUCT_CONSTRUCTORS','-DVULKAN_HPP_NO_SETTERS','-DVULKAN_HPP_NO_SMART_HANDLE','-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1','-DVULKAN_HPP_ENABLE_DYNAMIC_LOADER_TOOL=0',*shlex.split(os.environ.get('GPU_CXXFLAGS',''))]
+     with tempfile.TemporaryDirectory(prefix='gpu-shader-runtime-')as temporary:
+--- a/app/src/main/rust/gpu/tests/run_shader_manager_native.py
++++ b/app/src/main/rust/gpu/tests/run_shader_manager_native.py
+@@ -10,7 +10,7 @@
+ if not cxx:raise SystemExit('Shader manager tests require Clang')
+ headers=deps/'vulkan-headers/include'
+ if not headers.is_dir():headers=deps/'vkhpp/Vulkan-Headers/include'
+-shader=next((x for x in[deps/'shader-compiler',deps/'shader-compiler/shader_compiler']if(x/'runtime_info.h').is_file()),None)
++shader=next((x for x in[deps/'shader-compiler',deps/'shader-compiler/shader_compiler', deps / 'shader-compiler/include/shader_compiler']if(x/'runtime_info.h').is_file()),None)
+ if shader is None:raise SystemExit('Missing pinned shader compiler checkout')
+ boost=sorted((deps/'boost/libs').glob('*/include'))
+ flags=['-std=c++20','-O1','-fPIC','-ffunction-sections','-fdata-sections','-fno-strict-aliasing','-Wall','-Wextra','-Wno-unused-parameter','-Wno-unused-private-field','-Wno-missing-field-initializers','-Wno-c99-designator','-Wno-reorder-init-list','-Wno-missing-braces','-DFMT_HEADER_ONLY','-DVULKAN_HPP_NO_SPACESHIP_OPERATOR','-DVULKAN_HPP_NO_STRUCT_CONSTRUCTORS','-DVULKAN_HPP_NO_SETTERS','-DVULKAN_HPP_NO_SMART_HANDLE','-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1','-DVULKAN_HPP_ENABLE_DYNAMIC_LOADER_TOOL=0']
+--- a/app/src/main/rust/gpu/tests/run_shader_native.py
++++ b/app/src/main/rust/gpu/tests/run_shader_native.py
+@@ -10,7 +10,7 @@
+ if not cxx:raise SystemExit('Shader input tests require Clang.')
+ headers=deps/'vulkan-headers/include'
+ if not headers.is_dir():headers=deps/'vkhpp/Vulkan-Headers/include'
+-shader=next((path for path in [deps/'shader-compiler',deps/'shader-compiler/shader_compiler']if(path/'runtime_info.h').is_file()),None)
++shader=next((path for path in [deps/'shader-compiler',deps/'shader-compiler/shader_compiler', deps / 'shader-compiler/include/shader_compiler']if(path/'runtime_info.h').is_file()),None)
+ if shader is None:raise SystemExit('Missing pinned shader-compiler checkout.')
+ flags=['-std=c++20','-O1','-fPIC','-fno-strict-aliasing','-Wall','-Wextra','-Wno-unused-parameter','-Wno-missing-field-initializers','-Wno-c99-designator','-Wno-reorder-init-list','-Wno-missing-braces',
+  '-DVULKAN_HPP_NO_SPACESHIP_OPERATOR','-DVULKAN_HPP_NO_STRUCT_CONSTRUCTORS','-DVULKAN_HPP_NO_SETTERS','-DVULKAN_HPP_NO_SMART_HANDLE','-DVULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1','-DVULKAN_HPP_ENABLE_DYNAMIC_LOADER_TOOL=0']
+--- a/app/src/main/rust/gpu/tests/run_shader_runtime_native.py
++++ b/app/src/main/rust/gpu/tests/run_shader_runtime_native.py
+@@ -27,7 +27,7 @@
+     headers = deps / 'vulkan-headers/include'
+     if not headers.is_dir():
+         headers = deps / 'vkhpp/Vulkan-Headers/include'
+-    shader = next((path for path in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler']
++    shader = next((path for path in [deps / 'shader-compiler', deps / 'shader-compiler/shader_compiler', deps / 'shader-compiler/include/shader_compiler']
+                    if (path / 'frontend/ir/program.h').is_file()), None)
+     cxx = os.environ.get('CXX') or shutil.which('clang++')
+     if not cxx or not shader:

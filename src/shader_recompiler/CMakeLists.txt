@@ -1,0 +1,277 @@
+# SPDX-FileCopyrightText: 2018 yuzu Emulator Project
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+add_library(shader_recompiler STATIC
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/bindings.h"
+    backend/glasm/emit_glasm.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/glasm/emit_glasm.h"
+    backend/glasm/emit_glasm_barriers.cpp
+    backend/glasm/emit_glasm_bitwise_conversion.cpp
+    backend/glasm/emit_glasm_composite.cpp
+    backend/glasm/emit_glasm_context_get_set.cpp
+    backend/glasm/emit_glasm_control_flow.cpp
+    backend/glasm/emit_glasm_convert.cpp
+    backend/glasm/emit_glasm_floating_point.cpp
+    backend/glasm/emit_glasm_image.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/glasm/emit_glasm_instructions.h"
+    backend/glasm/emit_glasm_integer.cpp
+    backend/glasm/emit_glasm_logical.cpp
+    backend/glasm/emit_glasm_memory.cpp
+    backend/glasm/emit_glasm_not_implemented.cpp
+    backend/glasm/emit_glasm_select.cpp
+    backend/glasm/emit_glasm_shared_memory.cpp
+    backend/glasm/emit_glasm_special.cpp
+    backend/glasm/emit_glasm_undefined.cpp
+    backend/glasm/emit_glasm_warp.cpp
+    backend/glasm/glasm_emit_context.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/glasm/glasm_emit_context.h"
+    backend/glasm/reg_alloc.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/glasm/reg_alloc.h"
+    backend/glsl/emit_glsl.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/glsl/emit_glsl.h"
+    backend/glsl/emit_glsl_atomic.cpp
+    backend/glsl/emit_glsl_barriers.cpp
+    backend/glsl/emit_glsl_bitwise_conversion.cpp
+    backend/glsl/emit_glsl_composite.cpp
+    backend/glsl/emit_glsl_context_get_set.cpp
+    backend/glsl/emit_glsl_control_flow.cpp
+    backend/glsl/emit_glsl_convert.cpp
+    backend/glsl/emit_glsl_floating_point.cpp
+    backend/glsl/emit_glsl_image.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/glsl/emit_glsl_instructions.h"
+    backend/glsl/emit_glsl_integer.cpp
+    backend/glsl/emit_glsl_logical.cpp
+    backend/glsl/emit_glsl_memory.cpp
+    backend/glsl/emit_glsl_not_implemented.cpp
+    backend/glsl/emit_glsl_select.cpp
+    backend/glsl/emit_glsl_shared_memory.cpp
+    backend/glsl/emit_glsl_special.cpp
+    backend/glsl/emit_glsl_undefined.cpp
+    backend/glsl/emit_glsl_warp.cpp
+    backend/glsl/glsl_emit_context.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/glsl/glsl_emit_context.h"
+    backend/glsl/var_alloc.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/glsl/var_alloc.h"
+    backend/spirv/emit_spirv.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/spirv/emit_spirv.h"
+    backend/spirv/emit_spirv_atomic.cpp
+    backend/spirv/emit_spirv_barriers.cpp
+    backend/spirv/emit_spirv_bitwise_conversion.cpp
+    backend/spirv/emit_spirv_composite.cpp
+    backend/spirv/emit_spirv_context_get_set.cpp
+    backend/spirv/emit_spirv_control_flow.cpp
+    backend/spirv/emit_spirv_convert.cpp
+    backend/spirv/emit_spirv_floating_point.cpp
+    backend/spirv/emit_spirv_image.cpp
+    backend/spirv/emit_spirv_image_atomic.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/spirv/emit_spirv_instructions.h"
+    backend/spirv/emit_spirv_integer.cpp
+    backend/spirv/emit_spirv_logical.cpp
+    backend/spirv/emit_spirv_memory.cpp
+    backend/spirv/emit_spirv_select.cpp
+    backend/spirv/emit_spirv_shared_memory.cpp
+    backend/spirv/emit_spirv_special.cpp
+    backend/spirv/emit_spirv_undefined.cpp
+    backend/spirv/emit_spirv_warp.cpp
+    backend/spirv/spirv_emit_context.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/spirv/spirv_emit_context.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/spirv/spirv_direct_ops.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/backend/spirv/spirv_definition_fields_0161.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/environment.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/exception.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/abstract_syntax_list.h"
+    frontend/ir/attribute.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/attribute.h"
+    frontend/ir/basic_block.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/basic_block.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/breadth_first_search.h"
+    frontend/ir/condition.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/condition.h"
+    frontend/ir/flow_test.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/flow_test.h"
+    frontend/ir/ir_emitter.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/ir_emitter.h"
+    frontend/ir/microinstruction.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/modifiers.h"
+    frontend/ir/opcodes.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/opcodes.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/opcodes.inc"
+    frontend/ir/patch.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/patch.h"
+    frontend/ir/post_order.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/post_order.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/pred.h"
+    frontend/ir/program.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/program.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/reg.h"
+    frontend/ir/type.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/type.h"
+    frontend/ir/value.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/ir/value.h"
+    frontend/maxwell/control_flow.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/control_flow.h"
+    frontend/maxwell/decode.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/decode.h"
+    frontend/maxwell/indirect_branch_table_track.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/indirect_branch_table_track.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/instruction.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/location.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/maxwell.inc"
+    frontend/maxwell/opcodes.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/opcodes.h"
+    frontend/maxwell/structured_control_flow.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/structured_control_flow.h"
+    frontend/maxwell/translate/impl/atomic_operations_global_memory.cpp
+    frontend/maxwell/translate/impl/atomic_operations_shared_memory.cpp
+    frontend/maxwell/translate/impl/attribute_memory_to_physical.cpp
+    frontend/maxwell/translate/impl/barrier_operations.cpp
+    frontend/maxwell/translate/impl/bitfield_extract.cpp
+    frontend/maxwell/translate/impl/bitfield_insert.cpp
+    frontend/maxwell/translate/impl/branch_indirect.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/translate/impl/common_encoding.h"
+    frontend/maxwell/translate/impl/common_funcs.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/translate/impl/common_funcs.h"
+    frontend/maxwell/translate/impl/condition_code_set.cpp
+    frontend/maxwell/translate/impl/double_add.cpp
+    frontend/maxwell/translate/impl/double_compare_and_set.cpp
+    frontend/maxwell/translate/impl/double_fused_multiply_add.cpp
+    frontend/maxwell/translate/impl/double_min_max.cpp
+    frontend/maxwell/translate/impl/double_multiply.cpp
+    frontend/maxwell/translate/impl/double_set_predicate.cpp
+    frontend/maxwell/translate/impl/exit_program.cpp
+    frontend/maxwell/translate/impl/find_leading_one.cpp
+    frontend/maxwell/translate/impl/floating_point_add.cpp
+    frontend/maxwell/translate/impl/floating_point_compare.cpp
+    frontend/maxwell/translate/impl/floating_point_compare_and_set.cpp
+    frontend/maxwell/translate/impl/floating_point_conversion_floating_point.cpp
+    frontend/maxwell/translate/impl/floating_point_conversion_integer.cpp
+    frontend/maxwell/translate/impl/floating_point_fused_multiply_add.cpp
+    frontend/maxwell/translate/impl/floating_point_min_max.cpp
+    frontend/maxwell/translate/impl/floating_point_multi_function.cpp
+    frontend/maxwell/translate/impl/floating_point_multiply.cpp
+    frontend/maxwell/translate/impl/floating_point_range_reduction.cpp
+    frontend/maxwell/translate/impl/floating_point_set_predicate.cpp
+    frontend/maxwell/translate/impl/floating_point_swizzled_add.cpp
+    frontend/maxwell/translate/impl/half_floating_point_add.cpp
+    frontend/maxwell/translate/impl/half_floating_point_fused_multiply_add.cpp
+    frontend/maxwell/translate/impl/half_floating_point_helper.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/translate/impl/half_floating_point_helper.h"
+    frontend/maxwell/translate/impl/half_floating_point_multiply.cpp
+    frontend/maxwell/translate/impl/half_floating_point_set.cpp
+    frontend/maxwell/translate/impl/half_floating_point_set_predicate.cpp
+    frontend/maxwell/translate/impl/impl.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/translate/impl/impl.h"
+    frontend/maxwell/translate/impl/integer_add.cpp
+    frontend/maxwell/translate/impl/integer_add_three_input.cpp
+    frontend/maxwell/translate/impl/integer_compare.cpp
+    frontend/maxwell/translate/impl/integer_compare_and_set.cpp
+    frontend/maxwell/translate/impl/integer_floating_point_conversion.cpp
+    frontend/maxwell/translate/impl/integer_funnel_shift.cpp
+    frontend/maxwell/translate/impl/integer_minimum_maximum.cpp
+    frontend/maxwell/translate/impl/integer_popcount.cpp
+    frontend/maxwell/translate/impl/integer_scaled_add.cpp
+    frontend/maxwell/translate/impl/integer_set_predicate.cpp
+    frontend/maxwell/translate/impl/integer_shift_left.cpp
+    frontend/maxwell/translate/impl/integer_shift_right.cpp
+    frontend/maxwell/translate/impl/integer_short_multiply_add.cpp
+    frontend/maxwell/translate/impl/integer_to_integer_conversion.cpp
+    frontend/maxwell/translate/impl/internal_stage_buffer_entry_read.cpp
+    frontend/maxwell/translate/impl/load_constant.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/translate/impl/load_constant.h"
+    frontend/maxwell/translate/impl/load_effective_address.cpp
+    frontend/maxwell/translate/impl/load_store_attribute.cpp
+    frontend/maxwell/translate/impl/load_store_local_shared.cpp
+    frontend/maxwell/translate/impl/load_store_memory.cpp
+    frontend/maxwell/translate/impl/logic_operation.cpp
+    frontend/maxwell/translate/impl/logic_operation_three_input.cpp
+    frontend/maxwell/translate/impl/move_predicate_to_register.cpp
+    frontend/maxwell/translate/impl/move_register.cpp
+    frontend/maxwell/translate/impl/move_register_to_predicate.cpp
+    frontend/maxwell/translate/impl/move_special_register.cpp
+    frontend/maxwell/translate/impl/not_implemented.cpp
+    frontend/maxwell/translate/impl/output_geometry.cpp
+    frontend/maxwell/translate/impl/pixel_load.cpp
+    frontend/maxwell/translate/impl/predicate_set_predicate.cpp
+    frontend/maxwell/translate/impl/predicate_set_register.cpp
+    frontend/maxwell/translate/impl/select_source_with_predicate.cpp
+    frontend/maxwell/translate/impl/surface_atomic_operations.cpp
+    frontend/maxwell/translate/impl/surface_load_store.cpp
+    frontend/maxwell/translate/impl/texture_fetch.cpp
+    frontend/maxwell/translate/impl/texture_fetch_swizzled.cpp
+    frontend/maxwell/translate/impl/texture_gather.cpp
+    frontend/maxwell/translate/impl/texture_gather_swizzled.cpp
+    frontend/maxwell/translate/impl/texture_gradient.cpp
+    frontend/maxwell/translate/impl/texture_load.cpp
+    frontend/maxwell/translate/impl/texture_load_swizzled.cpp
+    frontend/maxwell/translate/impl/texture_mipmap_level.cpp
+    frontend/maxwell/translate/impl/texture_query.cpp
+    frontend/maxwell/translate/impl/video_helper.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/translate/impl/video_helper.h"
+    frontend/maxwell/translate/impl/video_minimum_maximum.cpp
+    frontend/maxwell/translate/impl/video_multiply_add.cpp
+    frontend/maxwell/translate/impl/video_set_predicate.cpp
+    frontend/maxwell/translate/impl/vote.cpp
+    frontend/maxwell/translate/impl/warp_shuffle.cpp
+    frontend/maxwell/translate/translate.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/translate/translate.h"
+    frontend/maxwell/translate_program.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/frontend/maxwell/translate_program.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/host_translate_info.h"
+    ir_opt/collect_shader_info_pass.cpp
+    ir_opt/conditional_barrier_pass.cpp
+    ir_opt/constant_propagation_pass.cpp
+    ir_opt/dead_code_elimination_pass.cpp
+    ir_opt/dual_vertex_pass.cpp
+    ir_opt/global_memory_to_storage_buffer_pass.cpp
+    ir_opt/identity_removal_pass.cpp
+    ir_opt/layer_pass.cpp
+    ir_opt/lower_fp16_to_fp32.cpp
+    ir_opt/lower_fp64_to_fp32.cpp
+    ir_opt/lower_int64_to_int32.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/ir_opt/passes.h"
+    ir_opt/position_pass.cpp
+    ir_opt/rescaling_pass.cpp
+    ir_opt/ssa_rewrite_pass.cpp
+    ir_opt/texture_pass.cpp
+    ir_opt/vendor_workaround_pass.cpp
+    ir_opt/verification_pass.cpp
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/object_pool.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/precompiled_headers.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/profile.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/program_header.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/runtime_info.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/shader_info.h"
+    "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/varying_state.h"
+)
+
+target_link_libraries(shader_recompiler PUBLIC fmt::fmt sirit ${SKYRUS_SHADER_BOOST_TARGETS} range-v3)
+
+target_include_directories(shader_recompiler PUBLIC "${SKYRUS_SHADER_INCLUDE_DIR}")
+target_compile_features(shader_recompiler PUBLIC cxx_std_20)
+set_target_properties(shader_recompiler PROPERTIES POSITION_INDEPENDENT_CODE ON)
+add_library(SKYrus::ShaderCompiler ALIAS shader_recompiler)
+
+if (MSVC)
+    target_compile_options(shader_recompiler PRIVATE
+        /we4242 # 'identifier': conversion from 'type1' to 'type2', possible loss of data
+        /we4254 # 'operator': conversion from 'type1:field_bits' to 'type2:field_bits', possible loss of data
+        /we4800 # Implicit conversion from 'type' to bool. Possible information loss
+    )
+else()
+    target_compile_options(shader_recompiler PRIVATE
+        $<$<CXX_COMPILER_ID:Clang,AppleClang>:-Werror=conversion>
+
+        # Bracket depth determines maximum size of a fold expression in Clang since 9c9974c3ccb6.
+        # And this in turns limits the size of a std::array.
+        $<$<CXX_COMPILER_ID:Clang>:-fbracket-depth=1024>
+        $<$<CXX_COMPILER_ID:AppleClang>:-fbracket-depth=1024>
+    )
+endif()
+
+if (COMMAND create_target_directory_groups)
+    create_target_directory_groups(shader_recompiler)
+endif()
+
+if (SKYRUS_SHADER_USE_PRECOMPILED_HEADERS)
+    target_precompile_headers(shader_recompiler PRIVATE "${SKYRUS_SHADER_INCLUDE_DIR}/shader_compiler/precompiled_headers.h")
+endif()

@@ -1,0 +1,79 @@
+name: SKYrus shader compiler
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        cxx: [g++, clang++]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build clang libboost-dev libfmt-dev librange-v3-dev spirv-tools
+      - uses: actions/checkout@v4
+        with:
+          repository: strato-emu/sirit
+          ref: 4ab79a8c023aa63caaa93848b09b9fe8b183b1a9
+          path: build-deps/sirit
+          submodules: recursive
+      - name: Configure
+        env:
+          CXX: ${{ matrix.cxx }}
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DSKYRUS_SHADER_BUILD_TESTS=ON
+          -DSKYRUS_SHADER_USE_PRECOMPILED_HEADERS=ON
+          -DSKYRUS_SHADER_SIRIT_SOURCE_DIR="$GITHUB_WORKSPACE/build-deps/sirit"
+      - name: Build and test
+        run: |
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure
+          build/tests/skyrus_shader_smoke build/spirv
+          for module in build/spirv/*.spv; do spirv-val "$module"; done
+
+  android:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: strato-emu/boost
+          path: build-deps/boost
+          submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          repository: fmtlib/fmt
+          ref: 9.1.0
+          path: build-deps/fmt
+      - uses: actions/checkout@v4
+        with:
+          repository: ericniebler/range-v3
+          ref: 0.12.0
+          path: build-deps/range
+      - uses: actions/checkout@v4
+        with:
+          repository: strato-emu/sirit
+          ref: 4ab79a8c023aa63caaa93848b09b9fe8b183b1a9
+          path: build-deps/sirit
+          submodules: recursive
+      - name: Install SKYrus NDK
+        run: sdkmanager 'ndk;26.1.10909125'
+      - name: Build Android arm64 library
+        run: |
+          cmake -S tests/android -B build-android -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_TOOLCHAIN_FILE="$ANDROID_HOME/ndk/26.1.10909125/build/cmake/android.toolchain.cmake" \
+            -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-29 \
+            -DSKYRUS_TEST_DEPENDENCIES="$GITHUB_WORKSPACE/build-deps"
+          cmake --build build-android --target shader_recompiler --parallel 2

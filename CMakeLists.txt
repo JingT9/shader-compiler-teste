@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+cmake_minimum_required(VERSION 3.16)
+
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    project(SKYrusShaderCompiler VERSION 1.0.0 LANGUAGES CXX)
+endif()
+
+option(SKYRUS_SHADER_BUILD_TESTS "Build SKYrus shader compatibility tests" OFF)
+option(SKYRUS_SHADER_USE_PRECOMPILED_HEADERS "Use compiler precompiled headers" OFF)
+set(SKYRUS_SHADER_SIRIT_SOURCE_DIR "" CACHE PATH "Optional path to SKYrus's Sirit checkout")
+
+# SKYrus already creates these targets. A standalone consumer may use packages.
+if (NOT TARGET fmt::fmt)
+    find_package(fmt 8 CONFIG REQUIRED)
+endif()
+if (NOT TARGET sirit)
+    if (SKYRUS_SHADER_SIRIT_SOURCE_DIR)
+        add_subdirectory("${SKYRUS_SHADER_SIRIT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/sirit")
+    else()
+        find_package(sirit CONFIG REQUIRED)
+    endif()
+endif()
+if (TARGET Boost::container AND TARGET Boost::intrusive)
+    set(SKYRUS_SHADER_BOOST_TARGETS Boost::container Boost::intrusive)
+else()
+    find_package(Boost 1.74 REQUIRED)
+    if (TARGET Boost::headers)
+        set(SKYRUS_SHADER_BOOST_TARGETS Boost::headers)
+    else()
+        set(SKYRUS_SHADER_BOOST_TARGETS Boost::boost)
+    endif()
+endif()
+if (NOT TARGET range-v3)
+    find_package(range-v3 CONFIG REQUIRED)
+endif()
+
+set(SKYRUS_SHADER_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+add_subdirectory(src/shader_recompiler)
+
+if (SKYRUS_SHADER_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
